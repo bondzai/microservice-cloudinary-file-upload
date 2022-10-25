@@ -3,6 +3,7 @@ var bcrypt = require('bcryptjs');
 const lineNotify = require('./utils/lineNotify');
 const getIpFromRequest = require('./utils/getIP')
 const express = require("express");
+const path = require('path');
 const fileUpload = require("express-fileupload");
 const cloudinary = require("cloudinary").v2;
 const app = express();
@@ -69,13 +70,13 @@ app.post("/upload", async (req, res) => {
             res.send(details);
         }
     } else {
-        res.render("retry");
+        res.sendFile(path.join(__dirname+'/retry.html'));
     }
 });
 
 app.get("/", (req, res) => {
     var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
-    res.render("index");
+    res.sendFile(path.join(__dirname+'/index.html'));
     lineNotify(`
         someone using cloudinary
         IP: ${ip}`
