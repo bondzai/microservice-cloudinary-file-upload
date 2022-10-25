@@ -1,4 +1,5 @@
 require("dotenv").config();
+var bcrypt = require('bcryptjs');
 const lineNotify = require('./utils/lineNotify');
 const getIpFromRequest = require('./utils/getIP')
 const express = require("express");
@@ -25,7 +26,8 @@ app.use(
 );
 
 app.post("/upload", async (req, res) => {
-    if (req.body.spellSecret === process.env.SPELL_SECRET) {
+    const mySecret = await bcrypt.hash(req.body.spellSecret, 10);
+    if (req.body.spellSecret && (await bcrypt.compare(process.env.SPELL_SECRET, mySecret))) { 
         const uploadFolder = "labs"
         let result;
         let file = req.files.samplefile;
@@ -73,7 +75,7 @@ app.post("/upload", async (req, res) => {
 
 app.get("/", (req, res) => {
     var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
-    res.render("home");
+    res.render("index");
     lineNotify(`
         someone using cloudinary
         IP: ${ip}`
