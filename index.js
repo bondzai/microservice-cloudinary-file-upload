@@ -77,9 +77,7 @@ app.post("/upload", async (req, res) => {
 app.get("/", (req, res) => {
     var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
     res.sendFile(path.join(__dirname+'/index.html'));
-    lineNotify(`
-        someone using cloudinary
-        IP: ${ip}`
+    lineNotify(`IP: ${ip}`
     )
 });
 
