@@ -1,6 +1,5 @@
 require("dotenv").config();
 var bcrypt = require('bcryptjs');
-const lineNotify = require('./utils/lineNotify');
 const getIpFromRequest = require('./utils/getIP')
 const express = require("express");
 const path = require('path');
@@ -35,16 +34,8 @@ app.post("/upload", async (req, res) => {
         let file = req.files.samplefile;
         if (req.files.samplefile.length === undefined) {
             result = await cloudinary.uploader.upload(file.tempFilePath, {folder: uploadFolder });
-            lineNotify(
-                `+ + + + + + + + + +
-                Name: ${req.body.username}
-                Secret: ${req.body.spellSecret}
-                Type: ${result.resource_type}
-                No: 1
-                IP: ${ip}
-                + + + + + + + + + +`
-                );
             console.log(result);
+            console.log(`user_ip: ${ip}`)
             res.send(result);
         } else if (req.files) {
             let imageArray = [];
@@ -56,29 +47,23 @@ app.post("/upload", async (req, res) => {
             });
             }
             details = {
+                user_ip: ip,
                 user: req.body.username,
                 result,
                 imageArray,
             };
-            lineNotify(
-                `+ + + + + + + + + +
-                Name: ${req.body.spellSecret}
-                Secret: ${req.body.username}
-                Type: ${result.resource_type}
-                No: ${imageArray.length}
-                IP: ${ip}
-                + + + + + + + + + +`
-                );
             console.log(details);
             res.send(details);
         }
     } else {
-        res.sendFile(path.join(__dirname+'/retry.html'));
+        res.render("retry");
+        //res.sendFile(path.join(__dirname+'/retry.html'));
     }
 });
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname+'/index.html'));
+    res.render("index");
+    //res.sendFile(path.join(__dirname+'/index.html'));
     
 });
 
