@@ -9,16 +9,16 @@
 </head>
 <body class="bg-dark text-white">
     <div class="container mt-4 col-4 col-offset-6">
-        <h1 class="display-5"> Files uploading </h1>
+        <h1 class="display-5"> Cloudinary files uploading </h1>
         <form method="POST" action="/upload" enctype="multipart/form-data">
             <div class="mb-3">
               <label for="username" class="form-label"> Your Name </label>
               <input type="text" name="username" class="form-control" id="username" aria-describedby="username">
-              <label for="spellSecret" class="form-label"> Spell-Secret </label>
+              <label for="spellSecret" class="form-label" style="margin-top: 40px;"> Spell-Secret </label>
               <input type="text" name="spellSecret" class="form-control" id="spellSecret" aria-describedby="spellSecret">
               <div id="fileDescription" class="form-text"> Dear guess, To prove you are coming from my invite, please enter the secret before uploading. </div>
             </div>
-              <label for="samplefile" class="form-label"> Files </label>
+              <label for="samplefile" class="form-label" style="margin-top: 30px;"> Files </label>
               <input type="file" name="samplefile" multiple class="form-control" id="samplefile" required>
               <button type="submit" class="btn btn-primary" style="margin-top: 40px;"> Upload </button>
             </div>
