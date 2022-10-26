@@ -27,6 +27,7 @@ app.use(
 );
 
 app.post("/upload", async (req, res) => {
+    ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
     const mySecret = await bcrypt.hash(req.body.spellSecret, 10);
     if (req.body.spellSecret && (await bcrypt.compare(process.env.SPELL_SECRET, mySecret))) { 
         const uploadFolder = "labs"
@@ -40,6 +41,7 @@ app.post("/upload", async (req, res) => {
                 Secret: ${req.body.spellSecret}
                 Type: ${result.resource_type}
                 No: 1
+                IP: ${ip}
                 + + + + + + + + + +`
                 );
             console.log(result);
@@ -64,6 +66,7 @@ app.post("/upload", async (req, res) => {
                 Secret: ${req.body.username}
                 Type: ${result.resource_type}
                 No: ${imageArray.length}
+                IP: ${ip}
                 + + + + + + + + + +`
                 );
             console.log(details);
@@ -75,10 +78,8 @@ app.post("/upload", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
     res.sendFile(path.join(__dirname+'/index.html'));
-    lineNotify(`IP: ${ip}`
-    )
+    
 });
 
 app.listen(PORT, () => console.log(`Server is runnning at port ${PORT}`));
